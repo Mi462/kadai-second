@@ -41,6 +41,10 @@ function App() {
     setTodo("");
   }
 
+  const handleSubmit = async(e) => {
+    e.preventDefault();
+  }
+
   //プルダウンリストの内容（全て、着手中、完了）によって、表示されるTodoListが変わる
   const onChangeState = (e) => {
     setSelectState(e.target.value)
@@ -48,14 +52,14 @@ function App() {
 
   return (
     <div className="InputTodo">
-      <form>
+      <form onSubmit={handleSubmit}>
         <h1>Todoリスト</h1>
         <input 
           type="text"
           placeholder="Todoを入力" 
           value={todo} 
           onChange={(e) =>  setTodo(e.target.value)} />
-        <button onChange={onClickAdd}>追加</button>
+        <button onClick={onClickAdd}>追加</button>
       </form>
 
       <div className="TaskTodoList">
