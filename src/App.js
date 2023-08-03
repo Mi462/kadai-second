@@ -34,7 +34,7 @@ function App() {
     const newTodo = {
       id: todo.length + 1,
       text: todo,
-      status: state[0]
+      status: state
     }
     setTodoList([...todoList, newTodo]);
     //「追加」ボタン押下時にinputタグの中身を空にする
@@ -58,7 +58,7 @@ function App() {
           type="text"
           placeholder="Todoを入力" 
           value={todo} 
-          onChange={(e) =>  setTodo(e.target.value)} />
+          onChange={(e) => setTodo(e.target.value)} />
         <button onClick={onClickAdd}>追加</button>
       </form>
 
@@ -73,17 +73,19 @@ function App() {
         </select>
 
         <ul>
-          {todoList.forEach((id, todo) => {
-            <div className="TaskTodo" key={id}>
-              <li>{todo}</li>
+          {todoList.map((id, text, status) => {
+            return (
+              <div className="TaskTodo" key={id}>
+              <li>{text}</li>
                 <select name="condition">
-                  <option value={todo.status}>{todo.status}</option>
+                  <option value="all">全て</option>
                   <option value="doing">着手中</option>
                   <option value="done">完了</option>
                 </select>
                 <button>編集</button>
                 <button>削除</button>
             </div>
+            )
           })}
             
           
