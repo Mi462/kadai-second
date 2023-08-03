@@ -27,7 +27,7 @@ function App() {
   //入力された内容を「追加」ボタンでTodoListの欄に追加
   const onClickAdd = () => {
     //未入力の場合はボタンを押しても変化なしにする
-    if(todo = ""){
+    if(todo === ""){
       return;
     }
     //TodoList欄追加時、プルダウンリストの初期値は「全て」
@@ -69,11 +69,11 @@ function App() {
         </select>
 
         <ul>
-          {todoList.map((id, todo, status) => {
+          {todoList.forEach((id, todo) => {
             <div className="TaskTodo" key={id}>
               <li>{todo}</li>
                 <select name="condition">
-                  <option value={status}>{state}</option>
+                  <option value={todo.status}>{todo.status}</option>
                   <option value="doing">着手中</option>
                   <option value="done">完了</option>
                 </select>
