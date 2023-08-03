@@ -7,9 +7,9 @@ function App() {
 
   //入力された内容を「追加」ボタンでTodoListの欄に追加
     //未入力の場合はボタンを押しても変化なしにする
-    //TodoList欄追加時、input欄の横にあるプルダウンリストの内容（全て、着手中、完了）によって、表示されるTodoListが変わる
-
-  //TodoListの内容をプルダウンリストで変更可能にする(初期値は「全て」)
+    //TodoList欄追加時、プルダウンリストの初期値は「全て」
+    
+  //プルダウンリストの内容（全て、着手中、完了）によって、表示されるTodoListが変わる
 
   //TodoListに追加された内容を「編集」ボタンで内容を変更可能にする
   
@@ -30,18 +30,18 @@ function App() {
     if(todo = ""){
       return;
     }
-    //TodoList欄追加時、input欄の横にあるプルダウンリストの内容（全て、着手中、完了）によって、表示されるTodoListが変わる
-    // const newTodo = {
-    //   //id: ,
-    //   content: todo,
-    //   status: ""
-    // }
-    setTodoList([...todoList, todo]);
+    //TodoList欄追加時、プルダウンリストの初期値は「全て」
+    const newTodo = {
+      id: todo.length + 1,
+      text: todo,
+      status: state[0]
+    }
+    setTodoList([...todoList, newTodo]);
     //「追加」ボタン押下時にinputタグの中身を空にする
     setTodo("");
   }
 
-  //TodoListの内容をプルダウンリストで変更可能にする
+  //プルダウンリストの内容（全て、着手中、完了）によって、表示されるTodoListが変わる
   const onChangeState = (e) => {
     setSelectState(e.target.value)
   }
@@ -54,9 +54,11 @@ function App() {
           type="text"
           placeholder="Todoを入力" 
           value={todo} 
-          //inputタグにTodoを入力
           onChange={(e) =>  setTodo(e.target.value)} />
         <button onChange={onClickAdd}>追加</button>
+      </form>
+
+      <div className="TaskTodoList">
         <select 
           name="condition"
           value={selectState}
@@ -65,15 +67,13 @@ function App() {
           <option value="doing">着手中</option>
           <option value="done">完了</option>
         </select>
-      </form>
 
-      <div className="TaskTodoList">
         <ul>
-          {todoList.map((todo, id) => {
+          {todoList.map((id, todo, status) => {
             <div className="TaskTodo" key={id}>
               <li>{todo}</li>
                 <select name="condition">
-                  <option value="all">全て</option>
+                  <option value={status}>{state}</option>
                   <option value="doing">着手中</option>
                   <option value="done">完了</option>
                 </select>
