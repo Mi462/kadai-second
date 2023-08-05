@@ -24,7 +24,7 @@ function App() {
   //一つ一つのプルダウンの状態
   //const [ subSelectState, setSubSelectState ] = useState("全て");
   //上のプルダウンの状態
-  //const [ selectState, setSelectState ] = useState("全て");
+  const [ selectState, setSelectState ] = useState("全て");
 
   console.log(todoList);
 
@@ -47,11 +47,6 @@ function App() {
 
   //一つ一つのプルダウンリストの内容を変更できる
   const onChangeSubSelect = (e, id) => {
-    //console.log(todo)
-    //setSubSelectState(e.target.value)
-    //subSelectState = [ ];
-    // const newTodo = ["全て", "着手中", "完了" ];
-    // newTodo.match(subSelectState)
     const changeStatus = todoList.map((todo) => {
       if(todo.id === id){
         return { id:todo.id, text:todo.text, status: e.target.value}
@@ -63,14 +58,17 @@ function App() {
   }
 
   //上のプルダウンリストの内容（全て、着手中、完了）によって、表示されるTodoListが変わる
-    // filterメソッドを使って新たな配列を作る
-    // if文でプルダウンリストの内容と一致するtodoListの配列の中身を配列に入れる
-    // 一致しないものは配列から削除する
-    // それをsetTodoListにセットする
-  const onChangeState = todoList.filter((todo) => {
-    //const option = document.createElement('option');
-    if( todo.status === "all"){
+    //mapメソッドで新しい配列を作る
+    //todoListの中のstateが上のプルダウンリストで選んだstateと同じものは出力するようにして（console.log？）返す
+    //異なるものはそのまま手を加えず返す
 
+  const onChangeState = todoList.map((e, status) => {
+    //const option = document.createElement('option');
+    selectState(e.target.value);
+    if( selectState === status){
+      return {  }
+    } else {
+      return todo
     }
 
   })
