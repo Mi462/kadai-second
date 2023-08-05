@@ -25,7 +25,7 @@ function App() {
   //const [ subSelectState, setSubSelectState ] = useState("全て");
   //上のプルダウンの状態
   const [ selectState, setSelectState ] = useState("全て");
-
+  console.log(setSelectState)
   console.log(todoList);
 
   //入力された内容を「追加」ボタンでTodoListの欄に追加
@@ -60,18 +60,7 @@ function App() {
   //上のプルダウンリストの内容（全て、着手中、完了）によって、表示されるTodoListが変わる
     //mapメソッドで新しい配列を作る
     //todoListの中のstateが上のプルダウンリストで選んだstateと同じものは出力するようにして（console.log？）返す
-    //異なるものはそのまま手を加えず返す
-
-  const onChangeState = todoList.map((e, status) => {
-    //const option = document.createElement('option');
-    selectState(e.target.value);
-    if( selectState === status){
-      return {  }
-    } else {
-      return todo
-    }
-
-  })
+    //異なるものはそのまま手を加えず返す  
 
   return (
     <div className="InputTodo">
@@ -88,7 +77,7 @@ function App() {
           name="condition"
           value={todo.status}
           //上のプルダウンの状態
-          onChange={(e) => onChangeState(e, todo.status)}
+          onChange={(e) => setSelectState(e.target.value)}
           >
           <option value="all">全て</option>
           <option value="doing">着手中</option>
@@ -97,22 +86,26 @@ function App() {
 
         <ul>
           {todoList.map((todo) => {
-            return (
-              <div className="TaskTodo" key={todo.id}>
-              <li>{todo.text}</li>
-                <select name="condition" 
-                  value={todo.status}
-                  onChange={(e) => onChangeSubSelect(e, todo.id)}
-                >
-                  <option value="all">全て</option>
-                  <option value="doing">着手中</option>
-                  <option value="done">完了</option>
-                </select>
-                <button>編集</button>
-                <button>削除</button>
-            </div>
-            )
-          })}
+
+            if ( setSelectState === todo.status ){
+              return (
+                <div className="TaskTodo" key={todo.id}>
+                <li>{todo.text}</li>
+                  <select name="condition" 
+                    value={todo.status}
+                    onChange={(e) => onChangeSubSelect(e)}>
+                    <option value="all">全て</option>
+                    <option value="doing">着手中</option>
+                    <option value="done">完了</option>
+                  </select>
+                  <button>編集</button>
+                  <button>削除</button>
+                </div>
+              )
+            }
+          })
+        }
+        
             
           
           <div>
