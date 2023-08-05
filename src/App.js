@@ -22,11 +22,11 @@ function App() {
   //Todoリストの状態
   const [ todoList , setTodoList ] = useState([]);
   //一つ一つのプルダウンの状態
-  const [ subSelectState, setSubSelectState ] = useState("全て");
+  //const [ subSelectState, setSubSelectState ] = useState("全て");
   //上のプルダウンの状態
-  const [ selectState, setSelectState ] = useState("全て");
+  //const [ selectState, setSelectState ] = useState("全て");
 
-  console.log(subSelectState);
+  console.log(todoList);
 
   //入力された内容を「追加」ボタンでTodoListの欄に追加
   const onClickAdd = () => {
@@ -38,7 +38,7 @@ function App() {
     const newTodo = {
       id: todo,
       text: todo,
-      status: subSelectState
+      status: "全て"
     }
     setTodoList([...todoList, newTodo]);
     //「追加」ボタン押下時にinputタグの中身を空にする
@@ -46,18 +46,34 @@ function App() {
   }
 
   //一つ一つのプルダウンリストの内容を変更できる
-  const onChangeSubSelectState = (e) => {
-    setSubSelectState(e.target.value)
+  const onChangeSubSelect = (e, id) => {
+    //console.log(todo)
+    //setSubSelectState(e.target.value)
+    //subSelectState = [ ];
+    // const newTodo = ["全て", "着手中", "完了" ];
+    // newTodo.match(subSelectState)
+    const changeStatus = todoList.map((todo) => {
+      if(todo.id === id){
+        return { id:todo.id, text:todo.text, status: e.target.value}
+      } else {
+        return todo
+      }
+    })
+    setTodoList(changeStatus)
   }
 
   //上のプルダウンリストの内容（全て、着手中、完了）によって、表示されるTodoListが変わる
-  // const onChangeState = () => {
-  //   const option = document.createElement('option');
-  //   if(selectState === "all"){
+    // filterメソッドを使って新たな配列を作る
+    // if文でプルダウンリストの内容と一致するtodoListの配列の中身を配列に入れる
+    // 一致しないものは配列から削除する
+    // それをsetTodoListにセットする
+  const onChangeState = todoList.filter((todo) => {
+    //const option = document.createElement('option');
+    if( todo.status === "all"){
 
-  //   }
+    }
 
-  //}
+  })
 
   return (
     <div className="InputTodo">
@@ -72,9 +88,9 @@ function App() {
       <div className="TaskTodoList">
         <select 
           name="condition"
-          value={selectState}
+          value={todo.status}
           //上のプルダウンの状態
-          //onChange={onChangeState}
+          onChange={(e) => onChangeState(e, todo.status)}
           >
           <option value="all">全て</option>
           <option value="doing">着手中</option>
@@ -87,8 +103,8 @@ function App() {
               <div className="TaskTodo" key={todo.id}>
               <li>{todo.text}</li>
                 <select name="condition" 
-                  value={todo.status} 
-                  onChange={onChangeSubSelectState}
+                  value={todo.status}
+                  onChange={(e) => onChangeSubSelect(e, todo.id)}
                 >
                   <option value="all">全て</option>
                   <option value="doing">着手中</option>
