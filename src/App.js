@@ -26,11 +26,9 @@ function App() {
   //const [ subSelectState, setSubSelectState ] = useState("全て");
   //上のプルダウンの状態
   const [ selectState, setSelectState ] = useState("all");
-  //編集ボタン時の入力欄の状態
-  const [ editTodo, setEditTodo ] = useState(); 
-  //編集ボタンのフラグ
-  const [ isEdit, setIsEdit ] = useState(true);
-  
+  //編集ボタン押下時のinputの中身の状態
+  // const [ editTodo, setEditTodo ] = useState();
+
   console.log(todoList)
 
   //入力された内容を「追加」ボタンでTodoListの欄に追加
@@ -43,7 +41,8 @@ function App() {
     const newTodo = {
       id: uuidv4(),
       text: todo,
-      status: "all"
+      status: "all",
+      isEditing: false
     }
     setTodoList([...todoList, newTodo]);
     //「追加」ボタン押下時にinputタグの中身を空にする
@@ -54,7 +53,7 @@ function App() {
   const onChangeSubSelect = (e, id) => {
     const changeStatus = todoList.map((todo) => {
       if(todo.id === id){
-        return { id:todo.id, text:todo.text, status: e.target.value}
+        return { id:todo.id, text:todo.text, status: e.target.value, isEditing: false}
       } else {
         return todo
       }
@@ -71,34 +70,29 @@ function App() {
   //TodoListに追加された内容を「編集」ボタンで内容を変更可能にする
     //「編集」ボタン押下時にinputタグと「保存」ボタンが出現
     //inputタグに入力後、「保存」ボタン押下時にTodoリストの内容が変わり、inputタグと「保存」ボタンが削除される
-  const onClickEditList = (e, todo) => {
-    //  if(todo.id === id)
-    // const newTodo = (
-    //  id: todo.id, 
-    //  text: e.target.value, 
-    //  status: todo.status 
-    // )
-    //  setEditTodo(e.target.value)
-
-    // // console.log(id)
-    // // if(todo.id === id){
-    //   return (
-    //     <div>
-    //       <input 
-    //        type="text"
-    //         // value={todo.text} 
-    //         // onChange={(e) => setEditTodo(e.target.value)} 
-    //         />
-    //       {/* //{id: todo.id, text: e.target.value, status: todo.status} */}
-    //       <button>保存</button>
-    //     </div>
-    //   )
+  const onClickEditList = (id) => {
+    const newTodo = todoList.map((todo) => {
+      if(todo.id === id){
+        return { id: todo.id, text: todo.text, status: todo.status, isEditing: true}
+      } else {
+        return todo
+      }
+    })
+    setTodoList(newTodo)
     }
+
+    //「保存」ボタン押下時にTodoリストの内容が変わり、inputタグと「保存」ボタンが削除される
+    const onClickKeepList = (id) => {
+      const newTodo = todoList.map((todo) => {
+        if(todo.id === id){
+          return { id:todo.id, text:todo.text, status: todo.status, isEditing: false}
+        } else {
+          return todo
+        }
+      })
+      setTodoList(newTodo)
+      }
     
-    //setEditTodo({ text: newTodo.text })
-    //setEditTodo(e.target.value)
-  
-  
   return (
     <div className="InputTodo">
         <h1>Todoリスト</h1>
@@ -115,7 +109,7 @@ function App() {
           value={todo.status}
           //上のプルダウンの状態
           onChange={(e) => setSelectState(e.target.value)}
-          >
+        >
           <option value="all">全て</option>
           <option value="doing">着手中</option>
           <option value="done">完了</option>
@@ -129,28 +123,36 @@ function App() {
             
               return (
                 <div className="TaskTodo" key={todo.id}>
-                <li>{todo.text}</li>
-                  <select name="condition" 
-                    value={todo.status}
-                    onChange={(e) => onChangeSubSelect(e, todo.id)}>
-                    <option value="all">全て</option>
-                    <option value="doing">着手中</option>
-                    <option value="done">完了</option>
-                  </select>
-                  <button 
-                    value={todo.text}
-                    onClick={(e) => onClickEditList(e, todo)}>編集</button>
-                    {onClickEditList() ? (
+                  { todo.isEditing ? (  
                       <div>
                         <input 
                           type="text"
                           value={todo.text} 
-                          // onChange={(e) => setEditTodo(e.target.value)} 
-                       />
-                        <button>保存</button>
+                          onChange={(e) => setTodo(e.target.value)} 
+                        />
+                        <select name="condition" 
+                          value={todo.status}
+                          onChange={(e) => onChangeSubSelect(e, todo.id)}>
+                            <option value="all">全て</option>
+                            <option value="doing">着手中</option>
+                            <option value="done">完了</option>
+                        </select>
+                        <button onClick={() => onClickKeepList(todo.id)}>保存</button>
                       </div>
                     ) : (
-                      <div></div>
+                      <div>
+                        <li>{todo.text}</li>
+                          <select name="condition" 
+                            value={todo.status}
+                            onChange={(e) => onChangeSubSelect(e, todo.id)}>
+                            <option value="all">全て</option>
+                            <option value="doing">着手中</option>
+                            <option value="done">完了</option>
+                          </select>
+                          <button 
+                            value={todo.text}
+                            onClick={() => onClickEditList(todo.id)}>編集</button>
+                      </div>
                     )} 
                   <button onClick={() => onClickRemoveList(todo.id)}>削除</button>
                 </div>
