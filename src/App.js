@@ -28,6 +28,8 @@ function App() {
   const [ selectState, setSelectState ] = useState("all");
   //編集ボタン時の入力欄の状態
   const [ editTodo, setEditTodo ] = useState(); 
+  //編集ボタンのフラグ
+  const [ isEdit, setIsEdit ] = useState(true);
   
   console.log(todoList)
 
@@ -67,28 +69,35 @@ function App() {
   }
 
   //TodoListに追加された内容を「編集」ボタンで内容を変更可能にする
+    //「編集」ボタン押下時にinputタグと「保存」ボタンが出現
+    //inputタグに入力後、「保存」ボタン押下時にTodoリストの内容が変わり、inputタグと「保存」ボタンが削除される
   const onClickEditList = (e, todo) => {
-    // const newTodo = todoList.filter((todo) => todo.id === id)
-    // console.log(id)
-    if(todo.id === id){
-      return (
-        <div>
-          <input 
-           type="text"
-            value={todo} 
-            onChange={(e) => setTodo(e.target.value)} />
-          {/* //{id: todo.id, text: e.target.value, status: todo.status} */}
-          <button>更新</button>
-        </div>
-      )
+    //  if(todo.id === id)
+    // const newTodo = (
+    //  id: todo.id, 
+    //  text: e.target.value, 
+    //  status: todo.status 
+    // )
+    //  setEditTodo(e.target.value)
+
+    // // console.log(id)
+    // // if(todo.id === id){
+    //   return (
+    //     <div>
+    //       <input 
+    //        type="text"
+    //         // value={todo.text} 
+    //         // onChange={(e) => setEditTodo(e.target.value)} 
+    //         />
+    //       {/* //{id: todo.id, text: e.target.value, status: todo.status} */}
+    //       <button>保存</button>
+    //     </div>
+    //   )
     }
     
-    
-      
-
     //setEditTodo({ text: newTodo.text })
     //setEditTodo(e.target.value)
-  }
+  
   
   return (
     <div className="InputTodo">
@@ -131,6 +140,18 @@ function App() {
                   <button 
                     value={todo.text}
                     onClick={(e) => onClickEditList(e, todo)}>編集</button>
+                    {onClickEditList() ? (
+                      <div>
+                        <input 
+                          type="text"
+                          value={todo.text} 
+                          // onChange={(e) => setEditTodo(e.target.value)} 
+                       />
+                        <button>保存</button>
+                      </div>
+                    ) : (
+                      <div></div>
+                    )} 
                   <button onClick={() => onClickRemoveList(todo.id)}>削除</button>
                 </div>
               )
