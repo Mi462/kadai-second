@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { v4 as uuidv4 } from 'uuid';
 
 
 function App() {
@@ -25,8 +26,10 @@ function App() {
   //const [ subSelectState, setSubSelectState ] = useState("全て");
   //上のプルダウンの状態
   const [ selectState, setSelectState ] = useState("all");
-  //console.log(todoList);
-  console.log(selectState)
+  //編集ボタン時の入力欄の状態
+  const [ editTodo, setEditTodo ] = useState(); 
+  
+  console.log(todoList)
 
   //入力された内容を「追加」ボタンでTodoListの欄に追加
   const onClickAdd = () => {
@@ -36,7 +39,7 @@ function App() {
     }
     //TodoList欄追加時、プルダウンリストの初期値は「全て」
     const newTodo = {
-      id: todo,
+      id: uuidv4(),
       text: todo,
       status: "all"
     }
@@ -58,14 +61,35 @@ function App() {
   }
 
   //TodoListに追加された内容を「削除」ボタンで削除する
-  const onClickRemoveList = (todo) => {
-    const newTodos = [...todoList].filter((id) => id === todo.id)
+  const onClickRemoveList = (id) => {
+    const newTodos = todoList.filter((todo) => todo.id !== id)
     setTodoList(newTodos);
   }
-  
 
-  
+  //TodoListに追加された内容を「編集」ボタンで内容を変更可能にする
+  const onClickEditList = (e, todo) => {
+    // const newTodo = todoList.filter((todo) => todo.id === id)
+    // console.log(id)
+    if(todo.id === id){
+      return (
+        <div>
+          <input 
+           type="text"
+            value={todo} 
+            onChange={(e) => setTodo(e.target.value)} />
+          {/* //{id: todo.id, text: e.target.value, status: todo.status} */}
+          <button>更新</button>
+        </div>
+      )
+    }
+    
+    
+      
 
+    //setEditTodo({ text: newTodo.text })
+    //setEditTodo(e.target.value)
+  }
+  
   return (
     <div className="InputTodo">
         <h1>Todoリスト</h1>
@@ -104,8 +128,10 @@ function App() {
                     <option value="doing">着手中</option>
                     <option value="done">完了</option>
                   </select>
-                  <button>編集</button>
-                  <button onClick={() => onClickRemoveList(todo)}>削除</button>
+                  <button 
+                    value={todo.text}
+                    onClick={(e) => onClickEditList(e, todo)}>編集</button>
+                  <button onClick={() => onClickRemoveList(todo.id)}>削除</button>
                 </div>
               )
           })
