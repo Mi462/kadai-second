@@ -2,6 +2,7 @@ import { useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
 
 
+
 function App() {
 
   //inputタグにTodoを入力
@@ -22,15 +23,9 @@ function App() {
   const [ todo, setTodo ] = useState("");
   //Todoリストの状態
   const [ todoList , setTodoList ] = useState([]);
-  //一つ一つのプルダウンの状態
-  //const [ subSelectState, setSubSelectState ] = useState("全て");
   //上のプルダウンの状態
   const [ selectState, setSelectState ] = useState("all");
-  //編集ボタン押下時のinputの中身の状態
-  // const [ editTodo, setEditTodo ] = useState();
-
-  console.log(todoList)
-
+  
   //入力された内容を「追加」ボタンでTodoListの欄に追加
   const onClickAdd = () => {
     //未入力の場合はボタンを押しても変化なしにする
@@ -81,7 +76,19 @@ function App() {
     setTodoList(newTodo)
     }
 
-    //「保存」ボタン押下時にTodoリストの内容が変わり、inputタグと「保存」ボタンが削除される
+  //「編集」ボタン押下時にinputの中の文字を変更できる
+    const onChangeEditList = (e, id) => {
+      const editList = todoList.map((todo) => {
+        if(todo.id === id){
+          return { id: todo.id, text: e.target.value, status: todo.status, isEditing: true}
+        } else {
+          return todo
+        }
+      })
+      setTodoList(editList)
+    }
+    
+  //「保存」ボタン押下時にTodoリストの内容が変わり、inputタグと「保存」ボタンが削除される
     const onClickKeepList = (id) => {
       const newTodo = todoList.map((todo) => {
         if(todo.id === id){
@@ -128,7 +135,7 @@ function App() {
                         <input 
                           type="text"
                           value={todo.text} 
-                          onChange={(e) => setTodo(e.target.value)} 
+                          onChange={(e) => onChangeEditList(e, todo.id)} 
                         />
                         <select name="condition" 
                           value={todo.status}
@@ -160,26 +167,6 @@ function App() {
           })
         }
         
-          <div>
-            <li>本を買う</li>
-            <select name="condition">
-              <option value="all">全て</option>
-              <option value="doing">着手中</option>
-              <option value="done">完了</option>
-            </select>
-              <button>編集</button>
-              <button>削除</button>
-          </div>
-          <div>
-            <li>洗濯をする</li>
-            <select name="condition">
-              <option value="all">全て</option>
-              <option value="doing">着手中</option>
-              <option value="done">完了</option>
-            </select>
-              <button>編集</button>
-              <button>削除</button>
-          </div>
         </ul>
       </div>
     </div>
