@@ -24,9 +24,9 @@ function App() {
   //一つ一つのプルダウンの状態
   //const [ subSelectState, setSubSelectState ] = useState("全て");
   //上のプルダウンの状態
-  const [ selectState, setSelectState ] = useState("全て");
-  console.log(setSelectState)
-  console.log(todoList);
+  const [ selectState, setSelectState ] = useState("all");
+  //console.log(todoList);
+  console.log(selectState)
 
   //入力された内容を「追加」ボタンでTodoListの欄に追加
   const onClickAdd = () => {
@@ -38,7 +38,7 @@ function App() {
     const newTodo = {
       id: todo,
       text: todo,
-      status: "全て"
+      status: "all"
     }
     setTodoList([...todoList, newTodo]);
     //「追加」ボタン押下時にinputタグの中身を空にする
@@ -57,10 +57,14 @@ function App() {
     setTodoList(changeStatus)
   }
 
-  //上のプルダウンリストの内容（全て、着手中、完了）によって、表示されるTodoListが変わる
-    //mapメソッドで新しい配列を作る
-    //todoListの中のstateが上のプルダウンリストで選んだstateと同じものは出力するようにして（console.log？）返す
-    //異なるものはそのまま手を加えず返す  
+  //TodoListに追加された内容を「削除」ボタンで削除する
+  const onClickRemoveList = (todo) => {
+    const newTodos = [...todoList].filter((id) => id === todo.id)
+    setTodoList(newTodos);
+  }
+  
+
+  
 
   return (
     <div className="InputTodo">
@@ -86,28 +90,27 @@ function App() {
 
         <ul>
           {todoList.map((todo) => {
-
-            if ( setSelectState === todo.status ){
+            //上のプルダウンリストの内容（全て、着手中、完了）によって、表示されるTodoListが変わる
+              if ( selectState === "doing" && todo.status !== "doing") return //eslint-disable-line
+              if ( selectState === "done" && todo.status !== "done") return //eslint-disable-line
+            
               return (
                 <div className="TaskTodo" key={todo.id}>
                 <li>{todo.text}</li>
                   <select name="condition" 
                     value={todo.status}
-                    onChange={(e) => onChangeSubSelect(e)}>
+                    onChange={(e) => onChangeSubSelect(e, todo.id)}>
                     <option value="all">全て</option>
                     <option value="doing">着手中</option>
                     <option value="done">完了</option>
                   </select>
                   <button>編集</button>
-                  <button>削除</button>
+                  <button onClick={() => onClickRemoveList(todo)}>削除</button>
                 </div>
               )
-            }
           })
         }
         
-            
-          
           <div>
             <li>本を買う</li>
             <select name="condition">
