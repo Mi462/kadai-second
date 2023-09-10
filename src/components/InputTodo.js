@@ -1,6 +1,5 @@
 import React from 'react'
 
-
 const InputTodo = (props) => {
 
   const { type, placeholder, value, onChange, onClick } = props
